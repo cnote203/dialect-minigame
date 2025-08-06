@@ -1,0 +1,235 @@
+/* ----------------------
+   General Page Styling
+------------------------ */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ----------------------
+   Centering & Layout
+------------------------ */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.game-box {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+  width: 100%;
+}
+
+/* ----------------------
+   Typography
+------------------------ */
+h1 {
+  color: #1a73e8;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+/* ----------------------
+   Game Layout
+------------------------ */
+.game-area {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.main-panel {
+  flex: 2;
+  min-width: 280px;
+}
+
+.sidebar {
+  flex: 1;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  max-height: 160px;
+  overflow-y: auto;
+  min-width: 300px;
+}
+
+/* ----------------------
+   Game Text Elements
+------------------------ */
+.idiom-box {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+/* ----------------------
+   Inputs & Buttons
+------------------------ */
+input[type="text"] {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.3rem 0.5rem;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  margin: 0.5rem 0;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #155ec4;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* ----------------------
+   Feedback & Hints
+------------------------ */
+.feedback {
+  font-weight: bold;
+  min-height: 1.5rem;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.feedback.correct {
+  color: green;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.feedback.incorrect {
+  color: crimson;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.hint-area .hint {
+  background-color: #eef3fb;
+  border-left: 4px solid #1a73e8;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+}
+
+/* ----------------------
+   Locked Explanation Box
+------------------------ */
+#explanationBox {
+  margin-top: 1rem;
+}
+
+.locked-explanation {
+  background-color: #222;
+  color: #ccc;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-style: italic;
+  text-align: center;
+  border-left: 4px solid #444;
+}
+
+/* ----------------------
+   Previous Guesses List
+------------------------ */
+ul {
+  padding-left: 0.5rem;
+  list-style-type: square;
+}
+
+#guessHistory li {
+  margin-bottom: 0.5rem;
+}
+
+#guessHistory li::before {
+  content: '📍';
+  margin-right: 0.3rem;
+}
+
+/* ----------------------
+   Shake Animation
+------------------------ */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.3s;
+}
+
+/* ----------------------
+   Final Message
+------------------------ */
+#finalMessage {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+/* ----------------------
+   Responsive Layout
+------------------------ */
+@media (max-width: 600px) {
+  .game-area {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: stretch;
+    flex-wrap: nowrap;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-height: none;
+    margin-top: 1rem;
+  }
+}
