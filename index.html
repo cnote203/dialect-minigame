@@ -15,12 +15,17 @@
         <div id="idiom" class="idiom-box">Idiom: </div>
 
         <div class="status-bar">
+          <div id="levelIndicator">Level 1 / 10</div>
           <div id="score">Score: 0</div>
+          <div id="totalScore">Total Score: 0</div>
           <div id="guesses">Guesses Left: 4</div>
           <div id="feedback" class="feedback"></div>
         </div>
 
-        <input type="text" id="guessInput" placeholder="Enter a country..." autocomplete="off">
+        <div class="input-row">
+          <input type="text" id="guessInput" placeholder="Enter a country..." autocomplete="off">
+          <button id="submitBtn">Submit</button>
+        </div>
         <button id="hintBtn">Use Hint</button>
 
         <div style="margin-top: 1rem;" class="nav-buttons">
