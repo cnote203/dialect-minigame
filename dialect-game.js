@@ -138,6 +138,7 @@ const levels = [
 
 let state = {};
 let currentLevelIndex = 0;
+let totalScore = 0;
 
 function loadLevel(index) {
   const level = levels[index];
@@ -151,7 +152,8 @@ function loadLevel(index) {
     guessesLeft: 4,
     score: 10,
     hintsUsed: 0,
-    guessedCorrectly: false
+    guessedCorrectly: false,
+    levelComplete: false
   };
 
   // Reset UI for new level
@@ -161,6 +163,8 @@ function loadLevel(index) {
   document.getElementById("guessInput").value = "";
   document.getElementById("guessInput").disabled = false;
   document.getElementById("hintBtn").disabled = false;
+  document.getElementById("submitBtn").disabled = false;
+  document.getElementById("explanationBox").innerHTML = "";
 
   renderGame();
 }
@@ -302,7 +306,6 @@ const countryCoordinates = {
   "Lesotho": { lat: -29.5, lon: 28.5 },
   "Liberia": { lat: 6.5, lon: -9.5 },
   "Libya": { lat: 25.0, lon: 17.0 },
-  "Libya": { lat: 25.0, lon: 17.0 },
   "Liechtenstein": { lat: 47.1667, lon: 9.5333 },
   "Lithuania": { lat: 56.0, lon: 24.0 },
   "Luxembourg": { lat: 49.75, lon: 6.1667 },
@@ -390,7 +393,6 @@ const countryCoordinates = {
   "South Sudan": { lat: 8.0, lon: 30.0 },
   "Spain": { lat: 40.0, lon: -4.0 },
   "Sri Lanka": { lat: 7.0, lon: 81.0 },
-  "Saint Vincent and the Grenadines": { lat: 13.25, lon: -61.2 },
   "Sudan": { lat: 15.0, lon: 30.0 },
   "Suriname": { lat: 4.0, lon: -56.0 },
   "Svalbard and Jan Mayen": { lat: 78.0, lon: 20.0 },
@@ -420,7 +422,6 @@ const countryCoordinates = {
   "Uruguay": { lat: -33.0, lon: -56.0 },
   "Uzbekistan": { lat: 41.0, lon: 64.0 },
   "Vanuatu": { lat: -16.0, lon: 167.0 },
-  "Venezuela": { lat: 8.0, lon: -66.0 },
   "Venezuela": { lat: 8.0, lon: -66.0 },
   "Vietnam": { lat: 16.0, lon: 106.0 },
   "Virgin Islands": { lat: 18.5, lon: -64.5 },
@@ -531,12 +532,16 @@ function calculateDistance(country1, country2) {
 // ---------------------
 function renderGame() {
   document.getElementById("idiom").innerText = `Idiom: "${state.phrase}"`;
-  document.getElementById("score").innerText = `Score: ${state.score}`;
+  document.getElementById("levelIndicator").innerText = `Level ${currentLevelIndex + 1} / ${levels.length}`;
+  document.getElementById("score").innerText = `Level Score: ${state.score}`;
+  document.getElementById("totalScore").innerText = `Total Score: ${totalScore}`;
   document.getElementById("guesses").innerText = `Guesses Left: ${state.guessesLeft}`;
 }
 
 function updateScoreUI() {
-  document.getElementById("score").innerText = `Score: ${state.score}`;
+  document.getElementById("levelIndicator").innerText = `Level ${currentLevelIndex + 1} / ${levels.length}`;
+  document.getElementById("score").innerText = `Level Score: ${state.score}`;
+  document.getElementById("totalScore").innerText = `Total Score: ${totalScore}`;
   document.getElementById("guesses").innerText = `Guesses Left: ${state.guessesLeft}`;
 }
 
@@ -563,6 +568,10 @@ function shakeInput() {
 }
 
 function renderWinScreen() {
+  if (!state.levelComplete) {
+    state.levelComplete = true;
+    totalScore += state.score;
+  }
   document.getElementById("feedback").innerHTML = `
     <span class="correct">🎉 Correct! ${state.answer} is the right answer!</span>
   `;
@@ -574,6 +583,9 @@ function renderWinScreen() {
 }
 
 function renderLoseScreen() {
+  if (!state.levelComplete) {
+    state.levelComplete = true;
+  }
   document.getElementById("feedback").innerHTML = `
     <span class="incorrect">❌ Out of guesses! The correct answer was ${state.answer}.</span>
   `;
@@ -590,6 +602,7 @@ function renderLoseScreen() {
 function disableInput() {
   document.getElementById("guessInput").disabled = true;
   document.getElementById("hintBtn").disabled = true;
+  document.getElementById("submitBtn").disabled = true;
 }
 
 // ---------------------
@@ -625,26 +638,37 @@ function capitalizeEachWord(str) {
 // ---------------------
 window.onload = () => {
   loadLevel(currentLevelIndex);
+
   document.getElementById("prevLevel").addEventListener("click", () => {
-  if (currentLevelIndex > 0) {
-    currentLevelIndex--;
-    loadLevel(currentLevelIndex);
-  }
-});
-
-    document.getElementById("nextLevel").addEventListener("click", () => {
-    if (currentLevelIndex < levels.length - 1) {
-        currentLevelIndex++;
-        loadLevel(currentLevelIndex);
+    if (currentLevelIndex > 0) {
+      currentLevelIndex--;
+      loadLevel(currentLevelIndex);
     }
-});
+  });
 
-
+  document.getElementById("nextLevel").addEventListener("click", () => {
+    if (!state.levelComplete) {
+      document.getElementById("feedback").innerHTML =
+        `<span class="incorrect">⚠️ Finish this level first!</span>`;
+      return;
+    }
+    if (currentLevelIndex < levels.length - 1) {
+      currentLevelIndex++;
+      loadLevel(currentLevelIndex);
+    } else {
+      document.getElementById("feedback").innerHTML =
+        `<span class="correct">🏆 You've completed all levels! Final Score: ${totalScore}</span>`;
+    }
+  });
 
   document.getElementById("guessInput").addEventListener("keydown", e => {
     if (e.key === "Enter") {
       submitGuess(e.target.value);
     }
+  });
+
+  document.getElementById("submitBtn").addEventListener("click", () => {
+    submitGuess(document.getElementById("guessInput").value);
   });
 
   document.getElementById("hintBtn").addEventListener("click", useHint);
